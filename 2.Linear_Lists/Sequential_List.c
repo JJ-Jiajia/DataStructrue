@@ -81,9 +81,11 @@ ElemType priorElem(SqList *list, ElemType e, ElemType *pre_e) {
     }
     return INFEASIBLE;
 }
-
+//在position位置插入元素e position位置的元素变成e
 Status sqListInsert(SqList *list, ElemType e, int position) {
-    if (++list->length > list->listSize)
+    if (++list->length > list->listSize){
+        //增加空间
+    }
         if (-2 != increaseSqListLength(list)) {
             for (int i = list->length; i > position; i--) {
                 list->elem[i] = list->elem[i - 1];
@@ -92,4 +94,33 @@ Status sqListInsert(SqList *list, ElemType e, int position) {
             return OK;
         }
     return ERROR;
+}
+
+//有序插完继续有序  不需要假设是按照升序的
+//2分查找优化怎么实现？
+Status sqListIn(SqList *list, ElemType e) {
+    int i;
+    for(i=0;i<list->length;i++){
+        if(i=list->length-1){
+            break;
+        }
+        if(e>=list->elem[i] && e<=list->elem[i+1]){
+            break;
+        }
+        if(e<=list->elem[i] && e>=list->elem[i+1]){
+            break;
+        }
+    }
+    Status status=sqListInsert(list,e,++i);
+    if(status){
+        return OK;
+    }
+}//2分查找优化怎么实现？
+Status sqListBinaryIn(SqList *list, ElemType e) {
+    int i;
+
+    Status status=sqListInsert(list,e,++i);
+    if(status){
+        return OK;
+    }
 }
